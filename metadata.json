@@ -1,0 +1,6 @@
+{
+  "name": "Anish AI",
+  "description": "An intelligent AI assistant with DeepThink reasoning, multimodal vision, and synced conversation history.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

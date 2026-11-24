@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidConversation(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.title is string &&
+             data.title.size() >= 1 &&
+             data.title.size() <= 120 &&
+             data.lastMessagePreview is string &&
+             data.lastMessagePreview.size() <= 240 &&
+             data.modelMode in ['FAST', 'DEEP_THINK'] &&
+             data.createdAt is timestamp &&
+             data.createdAt <= request.time &&
+             data.updatedAt is timestamp &&
+             data.updatedAt <= request.time;
+    }
+
+    function isValidMessage(data, userId, conversationId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.conversationId is string &&
+             data.conversationId == conversationId &&
+             data.role in ['USER', 'ASSISTANT'] &&
+             data.content is string &&
+             data.content.size() >= 1 &&
+             data.content.size() <= 32000 &&
+             (!('thinkingContent' in data) || (data.thinkingContent is string && data.thinkingContent.size() <= 32000)) &&
+             data.modelMode in ['FAST', 'DEEP_THINK'] &&
+             data.hasImage is bool &&
+             data.createdAt is timestamp &&
+             data.createdAt <= request.time;
+    }
+
+    match /users/{userId}/conversations/{conversationId} {
+      allow get: if isOwner(userId) && isValidId(conversationId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(conversationId) &&
+                       incoming().keys().hasAll(['userId', 'title', 'lastMessagePreview', 'modelMode', 'createdAt', 'updatedAt']) &&
+                       incoming().keys().hasOnly(['userId', 'title', 'lastMessagePreview', 'modelMode', 'createdAt', 'updatedAt']) &&
+                       isValidConversation(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(conversationId) &&
+                       isValidConversation(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['title', 'lastMessagePreview', 'modelMode', 'updatedAt']);
+
+      allow delete: if isOwner(userId) && isValidId(conversationId);
+
+      match /messages/{messageId} {
+        allow get: if isOwner(userId) && isValidId(conversationId) && isValidId(messageId);
+        allow list: if isOwner(userId) && isValidId(conversationId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(conversationId) &&
+                         isValidId(messageId) &&
+                         incoming().keys().hasAll(['userId', 'conversationId', 'role', 'content', 'modelMode', 'hasImage', 'createdAt']) &&
+                         incoming().keys().hasOnly(['userId', 'conversationId', 'role', 'content', 'thinkingContent', 'modelMode', 'hasImage', 'createdAt']) &&
+                         isValidMessage(incoming(), userId, conversationId);
+
+        allow update: if false;
+
+        allow delete: if isOwner(userId) && isValidId(conversationId) && isValidId(messageId);
+      }
+    }
+  }
+}

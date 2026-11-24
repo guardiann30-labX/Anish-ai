@@ -1,0 +1,96 @@
+{
+  "entities": {
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A user-owned AI assistant conversation thread.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated owner UID matching request.auth.uid."
+        },
+        "title": {
+          "type": "string",
+          "description": "Short conversation title."
+        },
+        "lastMessagePreview": {
+          "type": "string",
+          "description": "Snippet of the latest message in the thread."
+        },
+        "modelMode": {
+          "type": "string",
+          "enum": ["FAST", "DEEP_THINK"],
+          "description": "Assistant reasoning mode used in this conversation."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp updated via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": ["userId", "title", "lastMessagePreview", "modelMode", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "An individual message within a user's conversation.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated owner UID matching request.auth.uid."
+        },
+        "conversationId": {
+          "type": "string",
+          "description": "Parent conversation document ID."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["USER", "ASSISTANT"],
+          "description": "Message author role."
+        },
+        "content": {
+          "type": "string",
+          "description": "Main message body text."
+        },
+        "thinkingContent": {
+          "type": "string",
+          "description": "Optional DeepThink reasoning trace for assistant responses."
+        },
+        "modelMode": {
+          "type": "string",
+          "enum": ["FAST", "DEEP_THINK"],
+          "description": "Assistant mode used for this turn."
+        },
+        "hasImage": {
+          "type": "boolean",
+          "description": "Whether the user turn included an attached image."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp written via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": ["userId", "conversationId", "role", "content", "modelMode", "hasImage", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/conversations/{conversationId}": {
+      "schema": {
+        "$ref": "#/entities/Conversation"
+      },
+      "description": "Per-user AI conversation threads."
+    },
+    "/users/{userId}/conversations/{conversationId}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/ChatMessage"
+      },
+      "description": "Messages belonging to a specific user conversation."
+    }
+  }
+}

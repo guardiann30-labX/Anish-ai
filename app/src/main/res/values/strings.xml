@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Anish AI</string>
+    <string name="brand_tagline">Deep reasoning, multimodal clarity &amp; instant code</string>
+
+    <!-- Auth -->
+    <string name="auth_headline">Meet Anish AI</string>
+    <string name="auth_subtitle">Think deeper, analyze images, write cleaner code, and keep every conversation synced across your devices.</string>
+    <string name="auth_google_button">Sign in with Google</string>
+    <string name="auth_signing_in">Signing in…</string>
+    <string name="auth_feature_think">DeepThink step-by-step reasoning</string>
+    <string name="auth_feature_vision">Zero-permission Photo Picker vision analysis</string>
+    <string name="auth_feature_sync">Encrypted cloud conversation history</string>
+    <string name="auth_sign_out">Sign out</string>
+
+    <!-- Chat & Modes -->
+    <string name="chat_new_chat">New Chat</string>
+    <string name="chat_history_title">Conversations</string>
+    <string name="chat_history_empty">No saved conversations yet.\nStart asking Anish AI below.</string>
+    <string name="chat_welcome_title">How can I help you think today?</string>
+    <string name="chat_welcome_subtitle">Switch between Fast Chat for instant answers or DeepThink for structured reasoning.</string>
+    <string name="chat_input_placeholder">Message Anish AI…</string>
+    <string name="chat_mode_fast">Fast</string>
+    <string name="chat_mode_deep_think">DeepThink</string>
+    <string name="chat_thinking_label">Thought Process</string>
+    <string name="chat_thinking_active">Thinking deeply…</string>
+    <string name="chat_generating">Responding…</string>
+    <string name="chat_copy">Copy</string>
+    <string name="chat_copied">Copied to clipboard</string>
+    <string name="chat_regenerate">Regenerate</string>
+    <string name="chat_stop">Stop</string>
+    <string name="chat_delete_thread">Delete conversation</string>
+    <string name="chat_error_retry">Retry</string>
+    <string name="chat_image_attached">Image attached</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_done">Done</string>
+    <string name="auth_signed_in_fallback">Signed in</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Appearance &amp; Preferences</string>
+    <string name="settings_appearance">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Linen</string>
+    <string name="settings_theme_dark">Umber</string>
+    <string name="settings_haptics_title">Tactile Haptics</string>
+    <string name="settings_haptics_subtitle">Subtle vibration when a reply completes</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_open_drawer">Open conversation history</string>
+    <string name="cd_new_chat">Start new chat</string>
+    <string name="cd_attach_image">Attach image from gallery</string>
+    <string name="cd_remove_image">Remove attached image</string>
+    <string name="cd_send_message">Send message</string>
+    <string name="cd_stop_generation">Stop generating</string>
+    <string name="cd_copy_message">Copy message</string>
+    <string name="cd_copy_code">Copy code block</string>
+    <string name="cd_regenerate">Regenerate response</string>
+    <string name="cd_delete_conversation">Delete conversation</string>
+    <string name="cd_sanctuary_banner">Warm editorial studio illustration</string>
+</resources>
